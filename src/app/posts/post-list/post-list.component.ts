@@ -23,7 +23,7 @@ export class PostList implements OnInit,OnDestroy {
     constructor(public postsService:PostService){}
 
     ngOnInit(){
-        this.posts = this.postsService.getPost()
+        this.postsService.getPost()
         this.postsService.getPostUpdated().subscribe((posts:Post[])=>{
             this.posts=posts    
         })
