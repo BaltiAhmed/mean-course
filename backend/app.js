@@ -3,7 +3,14 @@ const bodyParser = require('body-parser')
 
 const mongoose = require('mongoose')
 
-const Post = require('./models/post')
+const path = require("path")
+
+const postsRoutes = require('./routes/posts')
+const usersRoutes = require('./routes/user')
+
+
+const { patch } = require('./routes/posts')
+
 
 const app = express()
 
@@ -16,6 +23,8 @@ mongoose.connect("mongodb+srv://balti:test1@cluster0.88i0x.mongodb.net/mean?retr
     })
 
 app.use(bodyParser.json())
+
+app.use("/image",express.static(path.join("backend/images")))
 
 app.use(function (req, res, next) {
     /*var err = new Error('Not Found');
@@ -37,27 +46,10 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.post('/api/posts', (req, res, next) => {
-    const post = new Post({
-        title: req.body.title,
-        content: req.body.content
-    });
-    post.save();
-    res.status(201).json({ message: 'post added' })
-})
+app.use('/api/posts',postsRoutes)
+app.use('/api/user',usersRoutes)
 
-app.get('/api/posts', (req, res, next) => {
-    Post.find().then((documents) => {
-        res.status(200).json({ message: 'post deleted'})
 
-    })
-})
-
-app.delete('/api/posts/:id',(req,res,next)=>{
-    console.log(req.params.id)
-    res.status(200).json({ message: 'fetch successfully', posts: documents })
-
-})
 
 
 module.exports = app;
